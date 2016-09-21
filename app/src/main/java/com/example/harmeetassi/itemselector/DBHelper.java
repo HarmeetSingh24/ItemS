@@ -7,7 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static DBHelper _instance = null;
@@ -39,14 +39,14 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insert(String details) {
+    public synchronized  void insert(String details) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("_detail", details);
         db.insert(TABLE_NAME, null, values);
     }
 
-    public void delete(int id) {
+    public synchronized void delete(int id) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             db.delete(TABLE_NAME, TABLE_ID + "= ?", new String[]{Integer.toString(id)});
@@ -67,9 +67,9 @@ public class DBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-    public ArrayList<String> getAllDetails()
+    public synchronized TreeMap<Integer,String> getAllDetails()
     {
-        ArrayList<String> array_list = new ArrayList<String>();
+        TreeMap<Integer,String> array_list = new TreeMap<>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -77,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while(!res.isAfterLast()){
-            array_list.add(res.getString(res.getColumnIndex(TABLE_DETAIL)));
+            array_list.put(res.getInt(res.getColumnIndex(TABLE_ID)),res.getString(res.getColumnIndex(TABLE_DETAIL)));
             res.moveToNext();
         }
         return array_list;

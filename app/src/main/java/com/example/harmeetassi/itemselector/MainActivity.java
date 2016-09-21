@@ -10,7 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,29 +31,19 @@ public class MainActivity extends AppCompatActivity {
         new_button = (ImageView) findViewById(R.id.save_widget);
         context = getBaseContext();
         dbHelper = new DBHelper(context);
-        ArrayList<String> arrayList = new ArrayList<>();
+        TreeMap<Integer,String> arrayList = new TreeMap<>();
         arrayList = dbHelper.getAllDetails();
         if (arrayList.size() != 0) {
-            for (int i = 0; i < arrayList.size(); i++) {
+            for (Map.Entry<Integer,String> i:arrayList.entrySet()) {
                 WidgetHelper widgetHelper = new WidgetHelper(context);
-                final String temp = arrayList.get(i);
-                widgetHelper.getImage().setText(arrayList.get(i));
+                final String temp = i.getValue();
+                widgetHelper.getImage().setText(temp);
                 accountLinear.addView(widgetHelper);
-                final int finalI = i;
-                /*widgetHelper.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent it = new Intent(MainActivity.this, ThirdActivty.class);
-                        it.putExtra("name", finalI);
-                        it.putExtra("detail",temp);
-                        startActivityForResult(it, 1);
-                        overridePendingTransition(R.animator.push_left_in, R.animator.push_left_out);
-                    }
-                });*/
+                final int finalI = i.getKey();
                 widgetHelper.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        find(finalI+1,temp);
+                        find(finalI,temp);
                     }
                 });
             }
@@ -73,19 +64,19 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             accountLinear.removeAllViews();
-            ArrayList<String> arrayList = new ArrayList<>();
+            TreeMap<Integer,String> arrayList = new TreeMap<>();
             arrayList = dbHelper.getAllDetails();
             if (arrayList.size() != 0) {
-                for (int i = 0; i < arrayList.size(); i++) {
+                for (Map.Entry<Integer,String> i:arrayList.entrySet()) {
                     WidgetHelper widgetHelper = new WidgetHelper(context);
-                    final String temp = arrayList.get(i);
-                    widgetHelper.getImage().setText(arrayList.get(i));
+                    final String temp = i.getValue();
+                    widgetHelper.getImage().setText(temp);
                     accountLinear.addView(widgetHelper);
-                    final int finalI = i;
+                    final int finalI = i.getKey();
                     widgetHelper.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            find(finalI+1,temp);
+                            find(finalI,temp);
                         }
                     });
                 }
