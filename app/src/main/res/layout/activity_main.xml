@@ -18,6 +18,14 @@
             android:orientation="vertical">
         </LinearLayout>
     </ScrollView>
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/bounceBallImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ball"
+        android:contentDescription="bouncingball" />
+
 
     <ImageView
         android:id="@+id/save_widget"
@@ -29,6 +37,17 @@
         android:layout_marginBottom="43dp"
         android:src="@mipmap/ic_add"
         tools:ignore="ContentDescription" />
+
+    <TextView
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/info"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/bounceBallImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="177dp" />
 
 
 </RelativeLayout>
